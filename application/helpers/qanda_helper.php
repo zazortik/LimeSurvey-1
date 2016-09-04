@@ -301,6 +301,10 @@ function retrieveAnswers($ia)
         case '*': // Equation
             $values=do_equation($ia);
             break;
+
+        case "?":
+            $values = do_question_object($ia);
+            break;
     }
 
 
@@ -412,6 +416,37 @@ function retrieveAnswers($ia)
 
     $qanda=array($qtitle, $answer, 'help', $display, $qid, $ia[2], $ia[5], $ia[1] );
     //New Return
+
+    /*
+    return array(
+      array(
+        array(
+          'all' => 'all', // deprecated?
+          'text' => 'text',
+          'number' => 1,
+          'input_error_class' => 'input_error_class',
+          'help' => 'help',
+          'valid_message' => 'valid_message',
+          'man_message' => 'man_message',
+          //'mandatory' => 'mandatory',
+          'file_valid_message' => 'file_valid_message',
+          'code' => 'code' // $ia[2]
+        ),
+        'answer',
+        'help',
+        'display',
+        $ia[0], // 'qid',
+        'ia[2]',
+        'ia[5]',
+        '123X123X123'
+      ),
+      array(
+        '123X123X123'
+      )
+    );
+     */
+    traceVar(array($qanda, $inputnames));
+
     return array($qanda, $inputnames);
 }
 
@@ -809,6 +844,14 @@ function do_equation($ia)
     ), true);
 
     $inputnames[] = $ia[1];
+    return array($answer, $inputnames);
+}
+
+/**
+ * 
+ */
+function do_question_object(array $ia)
+{
     return array($answer, $inputnames);
 }
 
