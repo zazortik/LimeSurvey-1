@@ -3775,6 +3775,13 @@
                     case 'E': //ARRAY (Increase/Same/Decrease) radio-buttons
                         $ansArray = $presets[$type];
                         break;
+                    case '?':
+                        // TODO: Replace with function call to queston object
+                        $ansArray = NULL;
+                        break;
+                    default:
+                        assert(false);
+                        break;
                 }
 
                 // set $subqtext text - for display of primary sub-question
@@ -3867,6 +3874,19 @@
                         $question = $fielddata['subquestion1'] . '[' . $fielddata['subquestion2'] . ']';
                         //                    $question = $fielddata['question'] . ': ' . $fielddata['subquestion1'] . '[' . $fielddata['subquestion2'] . ']';
                         $rowdivid = substr($sgqa,0,strpos($sgqa,'_'));
+                        break;
+                    case '?':
+                        // TODO: Replace with function call to queston object
+                        $csuffix = '';
+                        $sqsuffix = '';
+                        $varName = $fielddata['title'];
+                        if ($fielddata['aid'] != '') {
+                            $varName .= '_' . $fielddata['aid'];
+                        }
+                        $question = $fielddata['question'];
+                        break;
+                    default:
+                        assert(false);
                         break;
                 }
 
@@ -3989,6 +4009,15 @@
                             $jsVarName = 'java' . $sgqa;
                             $jsVarName_on = $jsVarName;
                         }
+                        break;
+                    case "?":
+                        // TODO: Replace with function call to queston object
+                        $jsVarName_on = 'answer' . $sgqa;
+                        $jsVarName = 'java' . $sgqa;
+                        break;
+                    default:
+                        // Impossible
+                        assert(false);
                         break;
                 }
                 // Hidden question are never on same page (except for equation)
