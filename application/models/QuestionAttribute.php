@@ -192,7 +192,15 @@ class QuestionAttribute extends LSActiveRecord
                 throw new \CException("Question is corrupt: no type defined for question " . $iQuestionID);
             }
 
-            $aAttributeNames = \ls\helpers\questionHelper::getQuestionAttributesSettings($sType);
+            if ($sType == '?')
+            {
+                // TODO: Get attributes from question object
+            }
+            else
+            {
+                $aAttributeNames = \ls\helpers\questionHelper::getQuestionAttributesSettings($sType);
+            }
+
             $oAttributeValues = QuestionAttribute::model()->findAll("qid=:qid",array('qid'=>$iQuestionID));
             $aAttributeValues=array();
             foreach($oAttributeValues as $oAttributeValue)
