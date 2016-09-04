@@ -302,18 +302,23 @@ function retrieveAnswers($ia)
             $values=do_equation($ia);
             break;
 
+        /**
+         * "?" is the question type for extensible questions. A second
+         * table column is necessary to define which module and class is used
+         * for this question type.
+         */
         case "?":
+            // Values is an array as ($answer : string, $inputnames : array), where
+            // $answer is HTML and $inputnames is an array of question codes
             $values = do_question_object($ia);
             break;
+        default:
+            throw new Exception("Unknown question type: " . $ia[4]);
     }
 
-
-    if (isset($values)) //Break apart $values array returned from switch
-    {
-        //$answer is the html code to be printed
-        //$inputnames is an array containing the names of each input field
-        list($answer, $inputnames)=$values;
-    }
+    //$answer is the html code to be printed
+    //$inputnames is an array containing the names of each input field
+    list($answer, $inputnames)=$values;
 
     if ($ia[6] == 'Y')
     {
@@ -848,7 +853,9 @@ function do_equation($ia)
 }
 
 /**
- * 
+ * Do custom question object.
+ * @param $ia Descr of ia at top of this file
+ * @return array
  */
 function do_question_object(array $ia)
 {
