@@ -311,6 +311,7 @@ function retrieveAnswers($ia)
             // Values is an array as ($answer : string, $inputnames : array), where
             // $answer is HTML and $inputnames is an array of question codes
             $values = do_question_object($ia);
+            list($answer, $inputnames)=$values;
             break;
         default:
             throw new Exception("Unknown question type: " . $ia[4]);
@@ -879,6 +880,8 @@ function do_equation($ia)
  */
 function do_question_object(array $ia)
 {
+    $answer = '';
+    $inputnames = array();
     return array($answer, $inputnames);
 }
 

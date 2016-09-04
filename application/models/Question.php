@@ -647,7 +647,14 @@ class Question extends LSActiveRecord
                 'hasdefaultvalues' => 0,
                 'assessable' => 0,
                 'answerscales' => 0),
-        );
+            "?" => array(
+                'description' => gT("Question object"),
+                'group' => gT("Question object"),
+                'subquestions' => 0,
+                'hasdefaultvalues' => 0,
+                'assessable' => 0,
+                'answerscales' => 0)
+            );
         /**
          * @todo Check if this actually does anything, since the values are arrays.
          */
