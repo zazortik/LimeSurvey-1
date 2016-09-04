@@ -647,6 +647,8 @@ class Question extends LSActiveRecord
                 'hasdefaultvalues' => 0,
                 'assessable' => 0,
                 'answerscales' => 0),
+            // TODO: Replace with function call to queston object
+            // In this case, scan available questions and add to list
             "?" => array(
                 'description' => gT("Question object"),
                 'group' => gT("Question object"),
