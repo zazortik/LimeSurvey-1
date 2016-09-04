@@ -880,8 +880,9 @@ function do_equation($ia)
  */
 function do_question_object(array $ia)
 {
-    $answer = '';
-    $inputnames = array();
+    $question = new TestQuestionObject();
+    $answer = $question->getAnswer();
+    $inputnames = $question->getQuestionCodes();
     return array($answer, $inputnames);
 }
 
