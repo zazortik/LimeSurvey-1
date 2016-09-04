@@ -320,18 +320,15 @@ function retrieveAnswers($ia)
     //$inputnames is an array containing the names of each input field
     list($answer, $inputnames)=$values;
 
-    if ($ia[6] == 'Y')
+    $questionIsMandatory = $ia[6] == 'Y';
+    if ($questionIsMandatory)
     {
-
-        //$qtitle .= doRender('/survey/question_help/asterisk', array(), true);
-        //$qtitle .= $qtitle;
-        //$question_text['mandatory'] = gT('*');
         $question_text['mandatory'] = doRender('/survey/question_help/asterisk', array(), true);
     }
 
     //If this question is mandatory but wasn't answered in the last page
     //add a message HIGHLIGHTING the question
-    $mandatory_msg = (($_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'] != $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['maxstep']) || ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'] == $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['prevstep']))?mandatory_message($ia):'';
+    $mandatory_msg = getMandatoryMessage($ia);
     $qtitle .= $mandatory_msg;
     $question_text['man_message'] = $mandatory_msg;
 
@@ -453,6 +450,29 @@ function retrieveAnswers($ia)
     traceVar(array($qanda, $inputnames));
 
     return array($qanda, $inputnames);
+}
+
+/**
+ * Check if we should display mandatory message
+ * @param array $ia
+ * @return string
+ */
+function getMandatoryMessage(array $ia)
+{
+    $step = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'];
+    $maxStep = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['maxstep'];
+    $prevStep = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['prevstep'];
+
+    if ($step != $maxStep || $step == $prevStep)
+    {
+        $mandatoryMessage = mandatory_message($ia);
+    }
+    else
+    {
+        $mandatoryMessage = '';
+    }
+
+    return $mandatoryMessage;
 }
 
 function mandatory_message($ia)
