@@ -107,7 +107,6 @@ function retrieveAnswers($ia)
     //globalise required config variables
     global $thissurvey;                          //These are set by index.php
 
-    $display    = $ia[7];                        //DISPLAY
     $qid        = $ia[0];                        // Question ID
     $qtitle     = $ia[3];
     $inputnames = array();
@@ -143,7 +142,6 @@ function retrieveAnswers($ia)
     // The following section adds to the templating system by allowing
     // templaters to control where the various parts of the question text
     // are put.
-
     $sTemplate = isset($thissurvey['template']) ? $thissurvey['template'] : NULL;
     if (is_file('templates/'.$sTemplate.'/question_start.pstpl'))
     {
@@ -192,47 +190,33 @@ function retrieveAnswers($ia)
     };
     // END: legacy question_start.pstpl code
     //===================================================================
-    //
 
-    $qanda=array($question_text, $answer, 'help', $display, $qid, $ia[2], $ia[5], $ia[1] );
-
-    //New Return
-    /*
-    return array(
-      array(
-        array(
-          'all' => 'all', // deprecated?
-          'text' => 'text',
-          'number' => 1,
-          'input_error_class' => 'input_error_class',
-          'help' => 'help',
-          'valid_message' => 'valid_message',
-          'man_message' => 'man_message',
-          //'mandatory' => 'mandatory',
-          'file_valid_message' => 'file_valid_message',
-          'code' => 'code' // $ia[2]
-        ),
-        'answer',
-        'help',
-        'display',
-        $ia[0], // 'qid',
-        'ia[2]',
-        'ia[5]',
-        '123X123X123'
-      ),
-      array(
-        '123X123X123'
-      )
+    $qanda = array(
+      $question_text,  // array
+      $answer,  // answer HTML
+      'help',  // TODO: Remove?
+      $ia[7],  // Conditions exists for this question
+      $qid,
+      $ia[2],
+      $ia[5],
+      $ia[1]
     );
-     */
 
     return array($qanda, $inputnames);
+}
+
+/**
+ * 
+ */
+function getQuestionCustomText(array $ia)
+{
 }
 
 /**
  * Get "values", meaning answer HTML and input codes
  * @param array $ia
  * @return array
+ * @todo $qtitle is not used?
  */
 function getAnswerAndInputNames($ia)
 {
