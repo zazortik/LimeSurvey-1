@@ -320,24 +320,16 @@ function retrieveAnswers($ia)
     //$inputnames is an array containing the names of each input field
     list($answer, $inputnames)=$values;
 
-    $questionIsMandatory = $ia[6] == 'Y';
-    if ($questionIsMandatory)
-    {
-        $question_text['mandatory'] = doRender('/survey/question_help/asterisk', array(), true);
-    }
-
     //If this question is mandatory but wasn't answered in the last page
     //add a message HIGHLIGHTING the question
     $mandatory_msg = getMandatoryMessage($ia);
     $qtitle .= $mandatory_msg;
-    $question_text['man_message'] = $mandatory_msg;
 
     $_vshow = (!isset($aQuestionAttributes['hide_tip']) || $aQuestionAttributes['hide_tip']==0)?true:false; // whether should initially be visible - TODO should also depend upon 'hidetip'?
 
-    list($validation_msg,$isValid) = validation_message($ia,$_vshow);
+    list($validation_msg, $isValid) = validation_message($ia,$_vshow);
 
     $qtitle .= $validation_msg;
-    $question_text['valid_message'] = $validation_msg;
 
     if (($_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'] != $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['maxstep']) || ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'] == $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['prevstep']))
     {
@@ -411,7 +403,7 @@ function retrieveAnswers($ia)
     };
     // END: legacy question_start.pstpl code
     //===================================================================
-
+    
     $qanda=array($question_text, $answer, 'help', $display, $qid, $ia[2], $ia[5], $ia[1] );
 
     //New Return
@@ -445,6 +437,32 @@ function retrieveAnswers($ia)
      */
 
     return array($qanda, $inputnames);
+}
+
+/**
+ * Compose an array of question text etc.
+ * Used by old question system.
+ * @param array $ia Spec at top of file
+ * @return array
+ */
+function composeQuestionText(array $ia)
+{
+    $question_text = array();
+
+    // Mandatory check
+    $questionIsMandatory = $ia[6] == 'Y';
+    if ($questionIsMandatory)
+    {
+        $question_text['mandatory'] = doRender('/survey/question_help/asterisk', array(), true);
+    }
+
+    $question_text['man_message'] = getMandatoryMessage($ia);
+
+    $_vshow = (!isset($aQuestionAttributes['hide_tip']) || $aQuestionAttributes['hide_tip']==0); // whether should initially be visible - TODO should also depend upon 'hidetip'?
+    list($validation_msg, $isValid) = validation_message($ia,$_vshow);
+    $question_text['valid_message'] = $validation_msg;
+
+    return $question_text;
 }
 
 /**
