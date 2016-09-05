@@ -112,25 +112,10 @@ function retrieveAnswers($ia)
     $qtitle     = $ia[3];
     $inputnames = array();
     $answer     = "";                            //Create the question/answer html
-    $number     = isset($ia[9]) ? $ia[9] : '';   // Previously in limesurvey, it was virtually impossible to control how the start of questions were formatted. // this is an attempt to allow users (or rather system admins) some control over how the starting text is formatted.
     $lang       = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang'];
     $aQuestionAttributes = QuestionAttribute::model()->getQuestionAttributes($ia[0]);
 
-    $question_text = array(
-        'all'                 => ''              // All has been added for backwards compatibility with templates that use question_start.pstpl (now redundant)
-        ,'text'               => $qtitle
-        ,'code'               => $ia[2]
-        ,'number'             => $number
-        ,'help'               => ''
-        ,'mandatory'          => ''
-        ,'man_message'        => ''
-        ,'valid_message'      => ''
-        ,'file_valid_message' => ''
-        ,'class'              => ''
-        ,'man_class'          => ''
-        ,'input_error_class'  => ''              // provides a class.
-        ,'essentials'         => ''
-    );
+    $question_text = composeQuestionText($ia);
 
     $oQuestion = Question::model()->findByPk(array('qid'=>$ia[0], 'language'=>$lang));
 
@@ -341,8 +326,6 @@ function retrieveAnswers($ia)
     // templaters to control where the various parts of the question text
     // are put.
 
-    $question_text = composeQuestionText($ia);
-
     $sTemplate = isset($thissurvey['template']) ? $thissurvey['template'] : NULL;
     if (is_file('templates/'.$sTemplate.'/question_start.pstpl'))
     {
@@ -437,8 +420,22 @@ function retrieveAnswers($ia)
  */
 function composeQuestionText(array $ia)
 {
-    $question_text = array();
-
+    $number     = isset($ia[9]) ? $ia[9] : '';   // Previously in limesurvey, it was virtually impossible to control how the start of questions were formatted. // this is an attempt to allow users (or rather system admins) some control over how the starting text is formatted.
+    $question_text = array(
+        'all'                 => '',              // All has been added for backwards compatibility with templates that use question_start.pstpl (now redundant)
+        'text'               => $ia[3],
+        'code'               => $ia[2],
+        'number'             => $number,
+        'help'               => '',
+        'mandatory'          => '',
+        'man_message'        => '',
+        'valid_message'      => '',
+        'file_valid_message' => '',
+        'class'              => '',
+        'man_class'          => '',
+        'input_error_class'  => '',              // provides a class.,
+        'essentials'         => ''
+    );
     // Mandatory check
     $questionIsMandatory = $ia[6] == 'Y';
     if ($questionIsMandatory)
@@ -483,7 +480,7 @@ function getFileValidationMessage(array $ia)
         $isValid = true;    // don't want to show any validation messages.
     }
 
-    return array($file_valid_message, $isValid);
+    return array($file_validation_msg, $isValid);
 }
 
 /**
