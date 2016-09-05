@@ -7,6 +7,7 @@ class TestQuestionObject // extends QuestionObjectBase
 {
 
   /**
+   * HTML
    * @return string
    */
   public function getAnswer()
@@ -15,9 +16,18 @@ class TestQuestionObject // extends QuestionObjectBase
   }
 
   /**
+   * All question codes for this question
    * @return array
    */
   public function getQuestionCodes()
   {
   }
+
+  /**
+   * @return array
+   */
+  public function getQuestionAttributes()
+  {
+  }
+
 }

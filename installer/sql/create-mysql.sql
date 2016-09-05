@@ -273,6 +273,7 @@ CREATE TABLE `prefix_questions` (
   `sid` int(11) NOT NULL default '0',
   `gid` int(11) NOT NULL default '0',
   `type` varchar(1) NOT NULL default 'T',
+  `extended_type` varchar(31) DEFAULT NULL,
   `title` varchar(20) NOT NULL default '',
   `question` text NOT NULL,
   `preg` text,
@@ -616,4 +617,4 @@ CREATE TABLE IF NOT EXISTS `prefix_notifications` (
 --
 -- Version Info
 --
-INSERT INTO `prefix_settings_global` VALUES ('DBVersion', '260');
+INSERT INTO `prefix_settings_global` VALUES ('DBVersion', '261');

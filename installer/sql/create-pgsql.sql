@@ -277,6 +277,7 @@ CREATE TABLE prefix_questions (
     "sid" integer DEFAULT 0 NOT NULL,
     "gid" integer DEFAULT 0 NOT NULL,
     "type" character varying(1) DEFAULT 'T' NOT NULL,
+    "extended_type" character varying(31) NULL,
     "title" character varying(20) DEFAULT '' NOT NULL,
     "question" text NOT NULL,
     "preg" text,
@@ -619,4 +620,4 @@ CREATE INDEX prefix_index ON prefix_notifications USING btree (entity, entity_id
 --
 -- Version Info
 --
-INSERT INTO prefix_settings_global VALUES ('DBVersion', '260');
+INSERT INTO prefix_settings_global VALUES ('DBVersion', '261');

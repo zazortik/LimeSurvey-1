@@ -272,6 +272,7 @@ CREATE TABLE [prefix_questions] (
 [sid] int NOT NULL default '0',
 [gid] int NOT NULL default '0',
 [type] varchar(1) NOT NULL default 'T',
+[extended_type] varchar(31) NULL,
 [title] nvarchar(20) NOT NULL default '',
 [question] nvarchar(max) NOT NULL,
 [preg] nvarchar(max) NULL,
@@ -610,4 +611,4 @@ CREATE INDEX [notif_index] ON [prefix_notifications] ([entity_id],[entity],[stat
 --
 -- Version Info
 --
-INSERT INTO [prefix_settings_global] VALUES ('DBVersion', '260');
+INSERT INTO [prefix_settings_global] VALUES ('DBVersion', '261');

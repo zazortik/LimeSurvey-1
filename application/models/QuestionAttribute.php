@@ -194,7 +194,10 @@ class QuestionAttribute extends LSActiveRecord
 
             if ($sType == '?')
             {
-                // TODO: Get attributes from question object
+                // TODO: Check extended_type
+                // $extendedType = $oQuestion->extended_type
+                $extendedQuestion = new TestQustionObject();
+                $aAttributeNames = $extendedQuestion->getAttributeNames();
             }
             else
             {

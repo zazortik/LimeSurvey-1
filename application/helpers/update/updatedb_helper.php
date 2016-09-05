@@ -1433,16 +1433,27 @@ function db_upgrade_all($iOldDBVersion, $bSilent=false) {
             $oDB->createCommand()->createIndex('notif_index', '{{notifications}}', 'entity, entity_id, status', false);
             $oDB->createCommand()->update('{{settings_global}}',array('stg_value'=>259),"stg_name='DBVersion'");
         }
+
         if ($iOldDBVersion < 260) {
             alterColumn('{{participant_attribute_names}}','defaultname',"string(255)",false);
             alterColumn('{{participant_attribute_names_lang}}','attribute_name',"string(255)",false);
             $oDB->createCommand()->update('{{settings_global}}',array('stg_value'=>260),"stg_name='DBVersion'");
         }
+
+        /**
+         * For question object types, add a new column called extended_type to question table
+         * @since 2016-09-05
+         */
+        if ($iOldDBVersion < 261) {
+            Yii::app()->db->createCommand()->addColumn('{{questions}}','extended_type','string(63)');
+            $oDB->createCommand()->update('{{settings_global}}',array('stg_value'=>261),"stg_name='DBVersion'");
+        }
+
         // Inform superadmin about update
         $superadmins = User::model()->getSuperAdmins();
         Notification::broadcast(array(
             'title' => gT('Database update'),
-            'message' => sprintf(gT('The database has been updated from version %s to version %s.'), $iOldDBVersion, '260')
+            'message' => sprintf(gT('The database has been updated from version %s to version %s.'), $iOldDBVersion, '261')
         ), $superadmins);
 
 
