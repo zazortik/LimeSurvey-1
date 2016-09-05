@@ -440,13 +440,13 @@ function composeQuestionText(array $ia, array $aQuestionAttributes)
     $question_text['man_message'] = getMandatoryMessage($ia);
 
     $_vshow = !isset($aQuestionAttributes['hide_tip']) || $aQuestionAttributes['hide_tip'] == 0; // whether should initially be visible - TODO should also depend upon 'hidetip'?
-    list($validation_msg, $isValid1) = validation_message($ia,$_vshow);
+    list($validation_msg, $isValid) = validation_message($ia,$_vshow);
     $question_text['valid_message'] = $validation_msg;
 
     list($file_valid_message, $isValid2) = getFileValidationMessage($ia);
     $question_text['file_valid_message'] = $ia[4] == "|" ? $file_validation_msg : "";
 
-    if (!empty($question_text['man_message']) || !$isValid1 || !$isValid2 || !empty($question_text['file_valid_message']))
+    if (!empty($question_text['man_message']) || (!$isValid && !$isValid2) || !empty($question_text['file_valid_message']))
     {
         $question_text['input_error_class'] = ' input-error';// provides a class to style question wrapper differently if there is some kind of user input error;
     }
