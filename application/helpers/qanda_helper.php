@@ -120,7 +120,7 @@ function retrieveAnswers($ia)
 
     //$answer is the html code to be printed
     //$inputnames is an array containing the names of each input field
-    list($answer, $inputnames) = getAnswerAndInputNames($ia);
+    list($answer, $inputnames) = getAnswerAndInputNames($ia, $aQuestionAttributes);
 
     //If this question is mandatory but wasn't answered in the last page
     //add a message HIGHLIGHTING the question
@@ -218,9 +218,10 @@ function getQuestionCustomText(array $ia)
  * @return array
  * @todo $qtitle is not used?
  */
-function getAnswerAndInputNames($ia)
+function getAnswerAndInputNames(array $ia, array $aQuestionAttributes)
 {
     $values = null;
+    $qtitle = '';  // Unused
     switch ($ia[4])
     {
         case 'X': //BOILERPLATE QUESTION
