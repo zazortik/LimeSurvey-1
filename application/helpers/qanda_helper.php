@@ -331,29 +331,17 @@ function retrieveAnswers($ia)
 
     $qtitle .= $validation_msg;
 
-    if (($_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'] != $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['maxstep']) || ($_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'] == $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['prevstep']))
-    {
-        $file_validation_msg = file_validation_message($ia);
-    }
-    else
-    {
-        $file_validation_msg = '';
-        $isValid = true;    // don't want to show any validation messages.
-    }
+    list($file_valid_message, $isValid) = getFileValidationMessage($ia);
 
     $qtitle .= $ia[4] == "|" ? $file_validation_msg : "";
-    $question_text['file_valid_message'] = $ia[4] == "|" ? $file_validation_msg : "";
-
-    if (!empty($question_text['man_message']) || !$isValid || !empty($question_text['file_valid_message']))
-    {
-        $question_text['input_error_class'] = ' input-error';// provides a class to style question wrapper differently if there is some kind of user input error;
-    }
 
     // =====================================================
     // START: legacy question_start.pstpl code
     // The following section adds to the templating system by allowing
     // templaters to control where the various parts of the question text
     // are put.
+
+    $question_text = composeQuestionText($ia);
 
     $sTemplate = isset($thissurvey['template']) ? $thissurvey['template'] : NULL;
     if (is_file('templates/'.$sTemplate.'/question_start.pstpl'))
@@ -403,6 +391,8 @@ function retrieveAnswers($ia)
     };
     // END: legacy question_start.pstpl code
     //===================================================================
+    //
+    //$question_text['all'] = 'dummy';
     
     $qanda=array($question_text, $answer, 'help', $display, $qid, $ia[2], $ia[5], $ia[1] );
 
@@ -458,11 +448,42 @@ function composeQuestionText(array $ia)
 
     $question_text['man_message'] = getMandatoryMessage($ia);
 
-    $_vshow = (!isset($aQuestionAttributes['hide_tip']) || $aQuestionAttributes['hide_tip']==0); // whether should initially be visible - TODO should also depend upon 'hidetip'?
-    list($validation_msg, $isValid) = validation_message($ia,$_vshow);
+    $_vshow = !isset($aQuestionAttributes['hide_tip']) || $aQuestionAttributes['hide_tip'] == 0; // whether should initially be visible - TODO should also depend upon 'hidetip'?
+    list($validation_msg, $isValid1) = validation_message($ia,$_vshow);
     $question_text['valid_message'] = $validation_msg;
 
+    list($file_valid_message, $isValid2) = getFileValidationMessage($ia);
+    $question_text['file_valid_message'] = $ia[4] == "|" ? $file_validation_msg : "";
+
+    if (!empty($question_text['man_message']) || !$isValid1 || !$isValid2 || !empty($question_text['file_valid_message']))
+    {
+        $question_text['input_error_class'] = ' input-error';// provides a class to style question wrapper differently if there is some kind of user input error;
+    }
+
     return $question_text;
+}
+
+/**
+ * @param array $ia
+ * return array (file_valid_message, isValid)
+ */
+function getFileValidationMessage(array $ia)
+{
+    $step = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['step'];
+    $maxStep = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['maxstep'];
+    $prevStep = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['prevstep'];
+    if ($step != $maxStep || $step == $prevStep)
+    {
+        $file_validation_msg = file_validation_message($ia);
+        $isValid = false;
+    }
+    else
+    {
+        $file_validation_msg = '';
+        $isValid = true;    // don't want to show any validation messages.
+    }
+
+    return array($file_valid_message, $isValid);
 }
 
 /**
