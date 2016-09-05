@@ -114,7 +114,7 @@ function retrieveAnswers($ia)
     $lang       = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang'];
     $aQuestionAttributes = QuestionAttribute::model()->getQuestionAttributes($ia[0]);
 
-    $question_text = composeQuestionText($ia);
+    $question_text = composeQuestionText($ia, $aQuestionAttributes);
 
     $oQuestion = Question::model()->findByPk(array('qid'=>$ia[0], 'language'=>$lang));
 
@@ -412,7 +412,7 @@ function getAnswerAndInputNames(array $ia, array $aQuestionAttributes)
  * @param array $ia Spec at top of file
  * @return array
  */
-function composeQuestionText(array $ia)
+function composeQuestionText(array $ia, array $aQuestionAttributes)
 {
     $number     = isset($ia[9]) ? $ia[9] : '';   // Previously in limesurvey, it was virtually impossible to control how the start of questions were formatted. // this is an attempt to allow users (or rather system admins) some control over how the starting text is formatted.
     $question_text = array(
