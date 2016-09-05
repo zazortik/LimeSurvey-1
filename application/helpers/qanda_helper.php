@@ -311,7 +311,6 @@ function retrieveAnswers($ia)
             // Values is an array as ($answer : string, $inputnames : array), where
             // $answer is HTML and $inputnames is an array of question codes
             $values = do_question_object($ia);
-            list($answer, $inputnames)=$values;
             break;
         default:
             throw new Exception("Unknown question type: " . $ia[4]);
@@ -412,12 +411,10 @@ function retrieveAnswers($ia)
     };
     // END: legacy question_start.pstpl code
     //===================================================================
-    $qtitle = $question_text;
-    // =====================================================
 
-    $qanda=array($qtitle, $answer, 'help', $display, $qid, $ia[2], $ia[5], $ia[1] );
+    $qanda=array($question_text, $answer, 'help', $display, $qid, $ia[2], $ia[5], $ia[1] );
+
     //New Return
-
     /*
     return array(
       array(
@@ -446,7 +443,6 @@ function retrieveAnswers($ia)
       )
     );
      */
-    traceVar(array($qanda, $inputnames));
 
     return array($qanda, $inputnames);
 }
