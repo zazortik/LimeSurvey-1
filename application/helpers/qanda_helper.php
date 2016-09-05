@@ -114,9 +114,9 @@ function retrieveAnswers($ia)
     $lang       = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang'];
     $aQuestionAttributes = QuestionAttribute::model()->getQuestionAttributes($ia[0]);
 
-    $question_text = composeQuestionText($ia, $aQuestionAttributes);
-
     $oQuestion = Question::model()->findByPk(array('qid'=>$ia[0], 'language'=>$lang));
+
+    $question_text = composeQuestionText($ia, $aQuestionAttributes, $oQuestion);
 
     //$answer is the html code to be printed
     //$inputnames is an array containing the names of each input field
@@ -410,10 +410,20 @@ function getAnswerAndInputNames(array $ia, array $aQuestionAttributes)
  * Compose an array of question text etc.
  * Used by old question system.
  * @param array $ia Spec at top of file
+ * @param array $aQuestionAttributes
+ * @param Question $oQuestion
  * @return array
  */
-function composeQuestionText(array $ia, array $aQuestionAttributes)
+function composeQuestionText(array $ia, array $aQuestionAttributes, Question $oQuestion)
 {
+
+    // Check for question objects
+    if ($ia[4] == '?')
+    {
+        $question = new TestQuestionObject();
+        return $question->getQuestionText($ia, $aQuestionAttributes, $oQuestion);
+    }
+
     $number     = isset($ia[9]) ? $ia[9] : '';   // Previously in limesurvey, it was virtually impossible to control how the start of questions were formatted. // this is an attempt to allow users (or rather system admins) some control over how the starting text is formatted.
     $question_text = array(
         'all'                 => '',              // All has been added for backwards compatibility with templates that use question_start.pstpl (now redundant)
