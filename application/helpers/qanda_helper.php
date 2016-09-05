@@ -100,7 +100,6 @@ function setNoAnswerMode($thissurvey)
 *                 $ia[1] = fieldname : string
 *               ]
 *               and $inputnames is ? used for hiddenfieldnames and upload file?
-*
 */
 function retrieveAnswers($ia)
 {
@@ -128,13 +127,6 @@ function retrieveAnswers($ia)
     );
 
     return array($qanda, $inputnames);
-}
-
-/**
- * 
- */
-function getQuestionCustomText(array $ia)
-{
 }
 
 /**
