@@ -194,9 +194,16 @@ class QuestionAttribute extends LSActiveRecord
 
             if ($sType == '?')
             {
-                // TODO: Check extended_type
-                // $extendedType = $oQuestion->extended_type
-                $extendedQuestion = new TestQustionObject();
+                // Abort if we have no extended type
+                if (empty($oQuestion->extended_type))
+                {
+                    throw new \CException('Internal error: question type is "?", but no extended type is defined');
+                }
+
+                //$extendedType = $oQuestion->extended_type;
+                // TODO: Should check installation table and match question class name with extended_type.
+                require_once(Yii::app()->basePath . '/core/questions/TestQuestionObject/TestQuestionObject.php');
+                $extendedQuestion = new TestQuestionObject();
                 $aAttributeNames = $extendedQuestion->getAttributeNames();
             }
             else
