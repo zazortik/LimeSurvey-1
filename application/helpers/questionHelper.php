@@ -20,8 +20,10 @@ class questionHelper
 {
     /**
      * The question attribute definition for this LimeSurvey installation
+     * @var array
      */
-    protected static $attributes;
+    public static $attributes;
+    
     /**
      * The question attribute (settings) by question type
      */
