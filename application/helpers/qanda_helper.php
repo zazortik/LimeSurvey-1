@@ -107,10 +107,6 @@ function retrieveAnswers($ia)
     //globalise required config variables
     global $thissurvey;                          //These are set by index.php
 
-    $qid        = $ia[0];                        // Question ID
-    $qtitle     = $ia[3];
-    $inputnames = array();
-    $answer     = "";                            //Create the question/answer html
     $lang       = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang'];
     $aQuestionAttributes = QuestionAttribute::model()->getQuestionAttributes($ia[0]);
 
@@ -118,88 +114,17 @@ function retrieveAnswers($ia)
 
     $question_text = composeQuestionText($ia, $aQuestionAttributes, $oQuestion);
 
-    //$answer is the html code to be printed
-    //$inputnames is an array containing the names of each input field
     list($answer, $inputnames) = getAnswerAndInputNames($ia, $aQuestionAttributes);
-
-    //If this question is mandatory but wasn't answered in the last page
-    //add a message HIGHLIGHTING the question
-    $mandatory_msg = getMandatoryMessage($ia);
-    $qtitle .= $mandatory_msg;
-
-    $_vshow = !isset($aQuestionAttributes['hide_tip']) || $aQuestionAttributes['hide_tip'] == 0; // whether should initially be visible - TODO should also depend upon 'hidetip'?
-
-    list($validation_msg, $isValid) = validation_message($ia,$_vshow);
-
-    $qtitle .= $validation_msg;
-
-    list($file_valid_message, $isValid) = getFileValidationMessage($ia);
-
-    $qtitle .= $ia[4] == "|" ? $file_validation_msg : "";
-
-    // =====================================================
-    // START: legacy question_start.pstpl code
-    // The following section adds to the templating system by allowing
-    // templaters to control where the various parts of the question text
-    // are put.
-    $sTemplate = isset($thissurvey['template']) ? $thissurvey['template'] : NULL;
-    if (is_file('templates/'.$sTemplate.'/question_start.pstpl'))
-    {
-        $qtitle_custom = '';
-
-        $replace=array();
-        foreach ($question_text as $key => $value)
-        {
-            $find[] = '{QUESTION_'.strtoupper($key).'}'; // Match key words from template
-            $replace[] = $value; // substitue text
-        };
-
-        if (!defined('QUESTION_START'))
-        {
-            define('QUESTION_START' , file_get_contents(getTemplatePath($thissurvey['template']).'/question_start.pstpl' , true));
-        };
-
-        $qtitle_custom = str_replace( $find , $replace , QUESTION_START);
-
-        $c = 1;
-        // START: <EMBED> work-around step 1
-        $qtitle_custom = preg_replace( '/(<embed[^>]+>)(<\/embed>)/i' , '\1NOT_EMPTY\2' , $qtitle_custom );
-        // END <EMBED> work-around step 1
-        while ($c > 0) // This recursively strips any empty tags to minimise rendering bugs.
-        {
-            $oldtitle=$qtitle_custom;
-            $qtitle_custom = preg_replace( '/<([^ >]+)[^>]*>[\r\n\t ]*<\/\1>[\r\n\t ]*/isU' , '' , $qtitle_custom , -1); // I removed the $count param because it is PHP 5.1 only.
-
-            $c = ($qtitle_custom!=$oldtitle)?1:0;
-        };
-        // START <EMBED> work-around step 2
-        $qtitle_custom = preg_replace( '/(<embed[^>]+>)NOT_EMPTY(<\/embed>)/i' , '\1\2' , $qtitle_custom );
-        // END <EMBED> work-around step 2
-        while ($c > 0) // This recursively strips any empty tags to minimise rendering bugs.
-        {
-            $oldtitle=$qtitle_custom;
-            $qtitle_custom = preg_replace( '/(<br(?: ?\/)?>(?:&nbsp;|\r\n|\n\r|\r|\n| )*)+$/i' , '' , $qtitle_custom , -1 ); // I removed the $count param because it is PHP 5.1 only.
-            $c = ($qtitle_custom!=$oldtitle)?1:0;
-        };
-
-        $question_text['all'] = $qtitle_custom;
-    }
-    else
-    {
-        $question_text['all'] = $qtitle;
-    };
-    // END: legacy question_start.pstpl code
-    //===================================================================
 
     $qanda = array(
       $question_text,  // array
       $answer,  // answer HTML
       'help',  // TODO: Remove?
       $ia[7],  // Conditions exists for this question
-      $qid,
-      $ia[2],
-      $ia[5],
-      $ia[1]
+      $ia[0],  // Qid
+      $ia[2],  // Title
+      $ia[5],  // Group ID
+      $ia[1]   // Fieldname
     );
 
     return array($qanda, $inputnames);
@@ -215,7 +140,7 @@ function getQuestionCustomText(array $ia)
 /**
  * Get "values", meaning answer HTML and input codes
  * @param array $ia
- * @return array
+ * @return array ($answer HTML, $inputnames qid array)
  * @todo $qtitle is not used?
  */
 function getAnswerAndInputNames(array $ia, array $aQuestionAttributes)
