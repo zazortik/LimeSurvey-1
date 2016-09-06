@@ -107,13 +107,13 @@ function retrieveAnswers($ia)
     global $thissurvey;                          //These are set by index.php
 
     $lang       = $_SESSION['survey_'.Yii::app()->getConfig('surveyID')]['s_lang'];
-    $aQuestionAttributes = QuestionAttribute::model()->getQuestionAttributes($ia[0]);
 
     $oQuestion = Question::model()->findByPk(array('qid'=>$ia[0], 'language'=>$lang));
 
+    $aQuestionAttributes = QuestionAttribute::model()->getQuestionAttributes($ia[0]);
     $question_text = composeQuestionText($ia, $aQuestionAttributes, $oQuestion);
 
-    list($answer, $inputnames) = getAnswerAndInputNames($ia, $aQuestionAttributes);
+    list($answer, $inputnames) = getAnswerAndInputNames($ia, $aQuestionAttributes, $oQuestion);
 
     $qanda = array(
       $question_text,  // array
@@ -126,6 +126,10 @@ function retrieveAnswers($ia)
       $ia[1]   // Fieldname
     );
 
+    traceVar($ia);
+    traceVar($question_text);
+    //traceVar(array($qanda, $inputnames));
+
     return array($qanda, $inputnames);
 }
 
@@ -135,7 +139,7 @@ function retrieveAnswers($ia)
  * @return array ($answer HTML, $inputnames qid array)
  * @todo $qtitle is not used?
  */
-function getAnswerAndInputNames(array $ia, array $aQuestionAttributes)
+function getAnswerAndInputNames(array $ia, array $aQuestionAttributes, Question $oQuestion)
 {
     $values = null;
     $qtitle = '';  // Unused
@@ -315,7 +319,7 @@ function getAnswerAndInputNames(array $ia, array $aQuestionAttributes)
         case "?":
             // Values is an array as ($answer : string, $inputnames : array), where
             // $answer is HTML and $inputnames is an array of question codes
-            $values = do_question_object($ia);
+            $values = do_question_object($ia, $aQuestionAttributes, $oQuestion);
             break;
         default:
             throw new Exception("Unknown question type: " . $ia[4]);
@@ -337,8 +341,9 @@ function composeQuestionText(array $ia, array $aQuestionAttributes, Question $oQ
     // Check for question objects
     if ($ia[4] == '?')
     {
-        $question = new TestQuestionObject();
-        return $question->getQuestionText($ia, $aQuestionAttributes, $oQuestion);
+        // TODO: Check extended_type here
+        $question = TestQuestionObject::getInstance($ia, $aQuestionAttributes, $oQuestion);
+        return $question->getQuestionText();
     }
 
     $number     = isset($ia[9]) ? $ia[9] : '';   // Previously in limesurvey, it was virtually impossible to control how the start of questions were formatted. // this is an attempt to allow users (or rather system admins) some control over how the starting text is formatted.
@@ -829,13 +834,19 @@ function do_equation($ia)
 /**
  * Do custom question object.
  * @param $ia Descr of ia at top of this file
+ * @param Question $oQuestion
  * @return array
  */
-function do_question_object(array $ia)
+function do_question_object(array $ia, array $aQuestionAttributes, Question $oQuestion)
 {
-    $question = new TestQuestionObject();
-    $answer = $question->getAnswer($ia);
-    $inputnames = $question->getQuestionCodes($ia);
+    $question = TestQuestionObject::getInstance();
+    $question->setIa($ia);
+    $question->setQuestionAttributes($aQuestionAttributes);
+    $question->setQuestionModel($oQuestion);
+
+    $answer = $question->getAnswer();
+    $inputnames = $question->getQuestionCodes();
+
     return array($answer, $inputnames);
 }
 

@@ -203,7 +203,7 @@ class QuestionAttribute extends LSActiveRecord
                 //$extendedType = $oQuestion->extended_type;
                 // TODO: Should check installation table and match question class name with extended_type.
                 require_once(Yii::app()->basePath . '/core/questions/TestQuestionObject/TestQuestionObject.php');
-                $extendedQuestion = new TestQuestionObject();
+                $extendedQuestion = TestQuestionObject::getInstance();
                 $aAttributeNames = $extendedQuestion->getAttributeNames();
             }
             else
