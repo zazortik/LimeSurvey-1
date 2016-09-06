@@ -82,7 +82,7 @@ class TestQuestionObject // extends QuestionObjectBase
           'text'               => 'some text',
           'code'               => $ia[2],
           'number'             => '',
-          'help'               => 'some help',
+          'help'               => 'some help',      // Not used, question help is set in _ValidateQuestion?
           'mandatory'          => '',
           'man_message'        => '',
           'valid_message'      => '',
