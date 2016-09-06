@@ -834,8 +834,8 @@ function do_equation($ia)
 function do_question_object(array $ia)
 {
     $question = new TestQuestionObject();
-    $answer = $question->getAnswer();
-    $inputnames = $question->getQuestionCodes();
+    $answer = $question->getAnswer($ia);
+    $inputnames = $question->getQuestionCodes($ia);
     return array($answer, $inputnames);
 }
 

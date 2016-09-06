@@ -10,9 +10,10 @@ class TestQuestionObject // extends QuestionObjectBase
 
   /**
    * HTML
+   * @param array $ia
    * @return string
    */
-  public function getAnswer()
+  public function getAnswer(array $ia)
   {
       return '<p>Some answer: <input name="todo" type="text" /></p>';
   }
@@ -59,12 +60,29 @@ class TestQuestionObject // extends QuestionObjectBase
    */
   public function getQuestionText(array $ia, array $QuestionAttributes, Question $questionModel)
   {
+      /*
       $questionText = array(
           'all'                 => '',              // All has been added for backwards compatibility with templates that use question_start.pstpl (now redundant)
           'text'               => $ia[3],
           'code'               => $ia[2],
           'number'             => '',
           'help'               => '',
+          'mandatory'          => '',
+          'man_message'        => '',
+          'valid_message'      => '',
+          'file_valid_message' => '',
+          'class'              => '',
+          'man_class'          => '',
+          'input_error_class'  => '',              // provides a class.,
+          'essentials'         => ''
+      );
+       */
+      $questionText = array(
+          'all'                 => '',              // All has been added for backwards compatibility with templates that use question_start.pstpl (now redundant)
+          'text'               => 'some text',
+          'code'               => $ia[2],
+          'number'             => '',
+          'help'               => 'some help',
           'mandatory'          => '',
           'man_message'        => '',
           'valid_message'      => '',
