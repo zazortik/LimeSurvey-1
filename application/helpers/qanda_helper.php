@@ -25,7 +25,7 @@
 *
 * $ia[0] => question id
 * $ia[1] => fieldname
-* $ia[2] => title
+* $ia[2] => title/code
 * $ia[3] => question text
 * $ia[4] => type --  text, radio, select, array, etc
 * $ia[5] => group id

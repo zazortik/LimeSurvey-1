@@ -15,7 +15,8 @@ class TestQuestionObject // extends QuestionObjectBase
    */
   public function getAnswer(array $ia)
   {
-      return '<p>Some answer: <input name="todo" type="text" /></p>';
+      // $ia[1] = 123X234X345
+      return '<p>Some answer: <input name="' . $ia[1] . '" type="text" /></p>';
   }
 
   /**
@@ -48,6 +49,7 @@ class TestQuestionObject // extends QuestionObjectBase
       $attributeNames[0]['i18n'] = false;  // TODO: Why needed?
       $attributeNames[0]['name'] = 'hidden';  // TODO: Why needed?
       $attributeNames[0]['default'] = 0;  // TODO: Why needed?
+
       return $attributeNames;
   }
 
@@ -79,17 +81,17 @@ class TestQuestionObject // extends QuestionObjectBase
        */
       $questionText = array(
           'all'                 => '',              // All has been added for backwards compatibility with templates that use question_start.pstpl (now redundant)
-          'text'               => 'some text',
-          'code'               => $ia[2],
-          'number'             => '',
-          'help'               => 'some help',      // Not used, question help is set in _ValidateQuestion?
-          'mandatory'          => '',
-          'man_message'        => '',
-          'valid_message'      => '',
-          'file_valid_message' => '',
-          'class'              => '',
-          'man_class'          => '',
-          'input_error_class'  => '',              // provides a class.,
+          'text'               => 'some text',      // Question text (not answer)
+          'code'               => $ia[2],           // Question code
+          'number'             => '',               // ?
+          'help'               => 'some help',      // Not used, question help is set in getQuestionReplacement and _ValidateQuestion?
+          'mandatory'          => '',               // HTML content of mandatory sign (*)
+          'man_message'        => '',               // HTML of mandatory message
+          'valid_message'      => '',               // HTML when question is not valid
+          'file_valid_message' => '',               // Only for file upload?
+          'class'              => '',               // ?
+          'man_class'          => '',               // ?
+          'input_error_class'  => '',               // 'input-error' will show a red border
           'essentials'         => ''
       );
       return $questionText;
