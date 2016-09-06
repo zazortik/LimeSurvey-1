@@ -342,7 +342,7 @@ function composeQuestionText(array $ia, array $aQuestionAttributes, Question $oQ
     if ($ia[4] == '?')
     {
         // TODO: Check extended_type here
-        $question = TestQuestionObject::getInstance($ia, $aQuestionAttributes, $oQuestion);
+        $question = TestQuestionObject::getInstance();
         return $question->getQuestionText();
     }
 

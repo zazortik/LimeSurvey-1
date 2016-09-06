@@ -12,6 +12,7 @@ class TestQuestionObject // extends QuestionObjectBase
     /**
      * Specification for this array is in top of qanda helper.
      * @var array
+     * @todo Rename to a more descriptive name
      */
     private $ia;
 
@@ -32,9 +33,6 @@ class TestQuestionObject // extends QuestionObjectBase
     static private $instance = null;
 
     /**
-     * @param array $ia
-     * @param array $questionAttributes
-     * @param Question $questionModel
      */
     private function __construct()
     {
@@ -92,7 +90,7 @@ class TestQuestionObject // extends QuestionObjectBase
 			 // 'assessment_value' => 0
 			 // 'scale_id' => 0
 			 // )
-            $answer .= '<option values="' . $answerOption['code'] . '">' . $answerOption['answer'] . ' </option>';
+            $answer .= '<option value="' . $answerOption['code'] . '">' . $answerOption['answer'] . ' </option>';
         }
         $answer .= '<select>';
 
@@ -173,19 +171,61 @@ class TestQuestionObject // extends QuestionObjectBase
     }
 
     /**
-     * @param array $questionAttributes
+     * Called from activateSurvey() in activate_helper.
+     * Example input:
+     * Array
+		(
+			[fieldname] => 194171X595X9034
+			[type] => ?
+			[sid] => 194171
+			[gid] => 595
+			[qid] => 9034
+			[aid] =>
+			[title] => questioncode
+			[question] => question text
+			[group_name] => My first question group
+			[mandatory] => N
+			[hasconditions] => N
+			[usedinconditions] => N
+			[questionSeq] => 0
+			[groupSeq] => 0
+			[relevance] => 1
+			[grelevance] => 1
+			[preg] =>
+			[other] => N
+			[help] => question help
+		)
+     * @return string Column SQL definition adapted to Yii and LS, like string(10), text or integer.
      */
-    public function setQuestionAttributes($questionAttributes)
+    public function getDatabaseFieldType(array $row)
+    {
+        // List dropdown uses string(5)
+        return 'string(5)';
+    }
+
+    /**
+     * @param array $questionAttributes
+     * @return void
+     */
+    public function setQuestionAttributes(array $questionAttributes)
     {
         $this->questionAttributes = $questionAttributes;
     }
 
-    public function setIa($ia)
+    /**
+     * @param array $ia
+     * @return void
+     */
+    public function setIa(array $ia)
     {
         $this->ia = $ia;
     }
 
-    public function setQuestionModel($questionModel)
+    /**
+     * @param Question $questionModel
+     * @return void
+     */
+    public function setQuestionModel(Question $questionModel)
     {
         $this->questionModel = $questionModel;
     }

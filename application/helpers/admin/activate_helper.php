@@ -381,6 +381,15 @@ function activateSurvey($iSurveyID, $simulate = false)
                 }
                 $aTableDefinition[$aRow['fieldname']] = "string(5)";
                 break;
+
+            /**
+             * Extended question types
+             */
+            case '?':
+                require_once(Yii::app()->basePath . '/core/questions/TestQuestionObject/TestQuestionObject.php');
+                $question = TestQuestionObject::getInstance();
+                $aTableDefinition[$aRow['fieldname']] = $question->getDatabaseFieldType($aRow);
+                break;
             default:
                 $aTableDefinition[$aRow['fieldname']] = "string(5)";
         }
