@@ -70,6 +70,8 @@ class TestQuestionObject // extends QuestionObjectBase
         //$answer .= 'Alt 2: <input type="radio" name="' . $this->ia[1] . '" value=2 />';
 
         // List with dropdown
+        // Same logic with list with radio buttons
+        /*
         $answerOptions = $this->questionModel->getOrderedAnswers(
             0,
             0
@@ -93,7 +95,9 @@ class TestQuestionObject // extends QuestionObjectBase
             $answer .= '<option value="' . $answerOption['code'] . '">' . $answerOption['answer'] . ' </option>';
         }
         $answer .= '<select>';
+         */
 
+        $answer = '';
         return $answer;
     }
 

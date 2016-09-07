@@ -1763,10 +1763,11 @@ return $allfields;
 * This function generates an array containing the fieldcode, and matching data in the same order as the activate script
 *
 * @param string $surveyid The Survey ID
-* @param mixed $style 'short' (default) or 'full' - full creates extra information like default values
-* @param mixed $force_refresh - Forces to really refresh the array, not just take the session copy
-* @param int $questionid Limit to a certain qid only (for question preview) - default is false
+* @param string $style 'short' (default) or 'full' - full creates extra information like default values
+* @param boolean $force_refresh - Forces to really refresh the array, not just take the session copy
+* @param int|boolean $questionid Limit to a certain qid only (for question preview) - default is false
 * @param string $sQuestionLanguage The language to use
+* @param array aDuplicateQIDs
 * @return array
 */
 function createFieldMap($surveyid, $style='short', $force_refresh=false, $questionid=false, $sLanguage, &$aDuplicateQIDs=array()) {
@@ -1976,10 +1977,23 @@ function createFieldMap($surveyid, $style='short', $force_refresh=false, $questi
         // Types "L", "!", "O", "D", "G", "N", "X", "Y", "5", "S", "T", "U"
         $fieldname="{$arow['sid']}X{$arow['gid']}X{$arow['qid']}";
 
+        // No subquestions and not R or | (ranking, file upload)
         if ($qtypes[$arow['type']]['subquestions']==0  && $arow['type'] != "R" && $arow['type'] != "|")
         {
-            if (isset($fieldmap[$fieldname])) $aDuplicateQIDs[$arow['qid']]=array('fieldname'=>$fieldname,'question'=>$arow['question'],'gid'=>$arow['gid']);
-            $fieldmap[$fieldname]=array("fieldname"=>$fieldname, 'type'=>"{$arow['type']}", 'sid'=>$surveyid, "gid"=>$arow['gid'], "qid"=>$arow['qid'], "aid"=>"");
+            if (isset($fieldmap[$fieldname]))
+            {
+                $aDuplicateQIDs[$arow['qid']] = array('fieldname'=>$fieldname,'question'=>$arow['question'],'gid'=>$arow['gid']);
+            }
+
+            $fieldmap[$fieldname] = array(
+                "fieldname"=>$fieldname,
+                'type'=>"{$arow['type']}",
+                'sid'=>$surveyid,
+                "gid"=>$arow['gid'],
+                "qid"=>$arow['qid'],
+                "aid"=>""
+            );
+
             if ($style == "full")
             {
                 $fieldmap[$fieldname]['title']=$arow['title'];

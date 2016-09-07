@@ -375,7 +375,7 @@ function composeQuestionText(array $ia, array $aQuestionAttributes, Question $oQ
     list($validation_msg, $isValid) = validation_message($ia,$_vshow);
     $question_text['valid_message'] = $validation_msg;
 
-    list($file_valid_message, $isValid2) = getFileValidationMessage($ia);
+    list($file_validation_msg, $isValid2) = getFileValidationMessage($ia);
     $question_text['file_valid_message'] = $ia[4] == "|" ? $file_validation_msg : "";
 
     if (!empty($question_text['man_message']) || (!$isValid && !$isValid2) || !empty($question_text['file_valid_message']))
