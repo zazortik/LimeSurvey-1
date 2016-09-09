@@ -29,6 +29,9 @@ class LSYii_Application extends CWebApplication
      * @var LimesurveyApi
      */
     protected $api;
+
+    public $uploadPath;
+
     /**
      *
     * Initiates the application
@@ -252,6 +255,11 @@ class LSYii_Application extends CWebApplication
         $event->set('action',$action->getId());
         App()->getPluginManager()->dispatchEvent($event);
         return $event->get("run",parent::beforeControllerAction($controller,$action));
+    }
+
+    public function getUploadPath()
+    {
+        return $this->uploadPath;
     }
 
 }

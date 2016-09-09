@@ -6274,13 +6274,13 @@ function doRender($sView, $aData, $bReturn=true)
     {
         $sTemplate = $thissurvey['template'];
         $oTemplate = Template::model()->getInstance($sTemplate);                // we get the template configuration
-        if($oTemplate->overwrite_question_views===true && Yii::app()->getConfig('allow_templates_to_overwrite_views'))                         // If it's configured to overwrite the views
+        if($oTemplate->overwrite_question_views === true)
         {
-            $requiredView = $oTemplate->viewPath.ltrim($sView, '/');            // Then we check if it has its own version of the required view
-            if( file_exists($requiredView.'.php') )                             // If it the case, the function will render this view
+            $requiredView = 'templates/' . $sTemplate . '/views' . $sView . '.twig';
+
+            if(file_exists(Yii::app()->uploadPath . '/' . $requiredView))                             // If it the case, the function will render this view
             {
-                Yii::setPathOfAlias('survey.template.view', $requiredView);     // to render a view from an absolute path outside of application/, path alias must be used.
-                $sView = 'survey.template.view';                                // See : http://www.yiiframework.com/doc/api/1.1/CController#getViewFile-detail
+                return Yii::app()->twig->renderFile(null, $requiredView, $aData, true);
             }
         }
     }
