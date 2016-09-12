@@ -49,7 +49,7 @@ class ETwigViewRenderer extends CApplicationComponent implements IViewRenderer
      * @var array Custom extensions
      * Example: array('Twig_Extension_Sandbox', 'Twig_Extension_Text')
      */
-    public $extensions = array();
+    public $extensions = array('Twig_Extension_Sandbox');
     /**
      * @var array Twig lexer options
      * @see http://twig.sensiolabs.org/doc/recipes.html#customizing-the-syntax
@@ -116,9 +116,24 @@ class ETwigViewRenderer extends CApplicationComponent implements IViewRenderer
             $this->addFilters($this->filters);
         }
         // Adding custom extensions
-        if (!empty($this->extensions)) {
-            $this->addExtensions($this->extensions);
-        }
+        //if (!empty($this->extensions)) {
+            //$this->addExtensions($this->extensions);
+        //}
+
+        // Add sandbox extension
+        $tags = array('if', 'for');
+        $filters = array('upper', 'escape');
+        $methods = array(
+            'Article' => array('getTitle', 'getBody'),
+        );
+        $properties = array(
+            'Article' => array('title', 'body'),
+        );
+        $functions = array('range');
+        $policy = new Twig_Sandbox_SecurityPolicy($tags, $filters, $methods, $properties, $functions);
+        $sandbox = new Twig_Extension_Sandbox($policy, true);
+        $this->_twig->addExtension($sandbox);
+
         // Change lexer syntax
         if (!empty($this->lexerOptions)) {
             $this->setLexerOptions($this->lexerOptions);
