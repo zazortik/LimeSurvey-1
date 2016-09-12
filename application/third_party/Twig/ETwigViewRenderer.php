@@ -62,6 +62,12 @@ class ETwigViewRenderer extends CApplicationComponent implements IViewRenderer
      */
     public $lexerOptions = array();
 
+    /**
+     * Sandbox configuration from intern.php
+     * @var array
+     */
+    public $sandboxConfig = array();
+
     private $_twig;
     private $_paths;
 
@@ -121,15 +127,11 @@ class ETwigViewRenderer extends CApplicationComponent implements IViewRenderer
         //}
 
         // Add sandbox extension
-        $tags = array('if', 'for');
-        $filters = array('upper', 'escape');
-        $methods = array(
-            'Article' => array('getTitle', 'getBody'),
-        );
-        $properties = array(
-            'Article' => array('title', 'body'),
-        );
-        $functions = array('range');
+        $tags = $this->sandboxConfig['tags'];
+        $filters = $this->sandboxConfig['filters'];
+        $methods = $this->sandboxConfig['methods'];
+        $properties = $this->sandboxConfig['properties'];
+        $functions = $this->sandboxConfig['functions'];
         $policy = new Twig_Sandbox_SecurityPolicy($tags, $filters, $methods, $properties, $functions);
         $sandbox = new Twig_Extension_Sandbox($policy, true);
         $this->_twig->addExtension($sandbox);

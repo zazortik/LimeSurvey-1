@@ -184,6 +184,13 @@ $internalConfig = array(
 			'filters' => array(
 			  'jencode' => 'CJSON::encode',
 			),
+            'sandboxConfig' => array(
+                'tags' => array('if', 'for'),
+                'filters' => array('escape'),
+                'methods' => array(),
+                'properties' => array(),
+                'functions' => array()
+            )
 			// Change template syntax to Smarty-like (not recommended)
 			/*
 			'lexerOptions' => array(
