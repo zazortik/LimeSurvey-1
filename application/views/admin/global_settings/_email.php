@@ -89,6 +89,12 @@
         <input class="form-control"  type='text' size='5' id='maxemails' name='maxemails' value="<?php echo htmlspecialchars(getGlobalSetting('maxemails')); ?>" />
     </div>
 </div>
+<div class="form-group">
+    <label class="col-sm-4  control-label"  for='maxemails'><?php eT("Email batch pause (in seconds):"); ?></label>
+    <div class="col-sm-2">
+        <input class="form-control"  type='text' size='5' id='emailpause' name='emailpause' value="<?php echo htmlspecialchars(getGlobalSetting('emailpause')); ?>" />
+    </div>
+</div>
 
 <?php if (Yii::app()->getConfig("demoMode")==true):?>
     <p><?php eT("Note: Demo mode is activated. Marked (*) settings can't be changed."); ?></p>
