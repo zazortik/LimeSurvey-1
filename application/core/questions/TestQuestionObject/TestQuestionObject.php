@@ -5,6 +5,11 @@
  * Dummy system to be replaced, only here to investigate the communication
  * between old and new question system.
  * This is implemented as a singleton.
+ *
+ * Files with entry points calling this object:
+ *   qanda_helper
+ *   QuestionAttribute
+ *   activate_helper
  */
 class TestQuestionObject // extends QuestionObjectBase
 {
@@ -26,6 +31,12 @@ class TestQuestionObject // extends QuestionObjectBase
      * @var Question
      */
     private $questionModel;
+
+    /**
+     * Data used to create fieldmap
+     * @var array
+     */
+    private $data;
 
     /**
      * @var TestQuestionObject
@@ -55,6 +66,7 @@ class TestQuestionObject // extends QuestionObjectBase
     /**
      * HTML for answers
      * This method will call renderPartial for views.
+     * Called from qanda_helper.
      * @return string
      */
     public function getAnswer()
@@ -62,14 +74,14 @@ class TestQuestionObject // extends QuestionObjectBase
         // $this->ia[1] = 123X234X345
         // As long as this code is provided, answer will be saved in database.
 
-        // Simple text question
+        // Short text question 'S'
         //$answer = '<p>Some answer: <input name="' . $this->ia[1] . '" type="text" /></p>';
 
-        // Radio button (5-point choice etc)
+        // Radio button (5-point choice etc) '5'
         //$answer = 'Alt 1: <input type="radio" name="' . $this->ia[1] . '" value=1 />';
         //$answer .= 'Alt 2: <input type="radio" name="' . $this->ia[1] . '" value=2 />';
 
-        // List with dropdown
+        // List with dropdown '!'
         // Same logic with list with radio buttons
         /*
         $answerOptions = $this->questionModel->getOrderedAnswers(
@@ -97,12 +109,26 @@ class TestQuestionObject // extends QuestionObjectBase
         $answer .= '<select>';
          */
 
-        $answer = '';
+        // List with comment 'O'
+        $answerOptions = $this->questionModel->getOrderedAnswers(
+            0, 0
+        );
+        $answer = '<select name="' . $this->ia[1] . '">';
+        $answer .= '<option value="">No answer</option>';
+        foreach ($answerOptions as $answerOption) {
+            $answer .= '<option value="' . $answerOption['code'] . '">' . $answerOption['answer'] . ' </option>';
+        }
+        $answer .= '<select>';
+        $answer .= '<textarea name="' . $this->ia[1]  . 'comment' . '"></textarea>';
+
+        traceVar($answerOptions);
+
         return $answer;
     }
 
     /**
      * All question codes for this question
+     * Called from qanda_helper.
      * @return array
      */
     public function getQuestionCodes()
@@ -119,6 +145,8 @@ class TestQuestionObject // extends QuestionObjectBase
      * 'inputtype'=>'text',
      * "help"=>gT('Maximum sum value of multiple numeric input'),
      * "caption"=>gT('Maximum sum value'));
+     *
+     * Called from QuestionAttribute.
      * @return array
      */
     public function getAttributeNames()
@@ -135,6 +163,7 @@ class TestQuestionObject // extends QuestionObjectBase
 
     /**
      * Same as composeQuestionText in qanda.
+     * Called from qanda_helper.
      * @return array
      */
     public function getQuestionText()
@@ -199,15 +228,23 @@ class TestQuestionObject // extends QuestionObjectBase
 			[other] => N
 			[help] => question help
 		)
-     * @return string Column SQL definition adapted to Yii and LS, like string(10), text or integer.
+     * @return array Column SQL definition adapted to Yii and LS, with key being the field name
+     *               Example: array('123X234X345' => 'string(5))
+     * @todo This method, like getFieldmap, should be automatic
      */
-    public function getDatabaseFieldType(array $row)
+    public function getDatabaseFieldTypes(array $row)
     {
         // List dropdown uses string(5)
-        return 'string(5)';
+        //return 'string(5)';
+
+        // List with comment
+        return array(
+            $row['fieldname'] => $row['database']
+        );
     }
 
     /**
+     * Called from qanda_helper.
      * @param array $questionAttributes
      * @return void
      */
@@ -217,6 +254,7 @@ class TestQuestionObject // extends QuestionObjectBase
     }
 
     /**
+     * Called from qanda_helper.
      * @param array $ia
      * @return void
      */
@@ -226,11 +264,99 @@ class TestQuestionObject // extends QuestionObjectBase
     }
 
     /**
+     * Called from qanda_helper.
      * @param Question $questionModel
      * @return void
      */
     public function setQuestionModel(Question $questionModel)
     {
         $this->questionModel = $questionModel;
+    }
+
+    /**
+     * Set data needed to create the fieldmap
+     * @param array $data
+     * @return void
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
+    /**
+     * Called from createFieldMap
+     * Array
+		(
+			[fieldname] => 194171X595X9034
+			[type] => ?
+			[sid] => 194171
+			[gid] => 595
+			[qid] => 9034
+			[aid] =>
+			[title] => questioncode
+			[question] => question text
+			[group_name] => My first question group
+			[mandatory] => N
+			[hasconditions] => N
+			[usedinconditions] => N
+			[questionSeq] => 0
+			[groupSeq] => 0
+			[relevance] => 1
+			[grelevance] => 1
+			[preg] =>
+			[other] => N
+			[help] => question help
+		)
+     * @todo Move parts to config.json, then build dynamically. Should not be needed to build manually.
+     * @param string $fieldname Like 'sidXgidXqid'
+     * @return array
+     */
+    public function getFieldmap($fieldname)
+    {
+        return array(
+            $fieldname => array(
+                'fieldname' => $fieldname,
+                'sid' => $this->data['sid'],
+                'gid' => $this->data['gid'],
+                'qid' => $this->data['qid'],
+                'aid' => null,
+                'title' => 'something',
+                'question' => 'The text',
+                'group_name' => 'group name',
+                'mandatory' => 'N',
+                'hasconditions' => 'N',
+                'usedinconditions' => 'N',
+                'questionSeq' => 0,
+                'groupSeq' => 0,
+                'relevance' => 1,
+                'grelevance' => 1,
+                'preg' => null,
+                'other' => 'N',
+                'help' => 'question help',
+                'type' => '?',
+                'database' => 'string(5)'
+            ),
+            $fieldname . 'comment' => array(
+                'fieldname' => $fieldname . 'comment',
+                'sid' => $this->data['sid'],
+                'gid' => $this->data['gid'],
+                'qid' => $this->data['qid'],
+                'aid' => null,
+                'title' => 'something',
+                'question' => 'The text',
+                'group_name' => 'group name',
+                'mandatory' => 'N',
+                'hasconditions' => 'N',
+                'usedinconditions' => 'N',
+                'questionSeq' => 0,
+                'groupSeq' => 0,
+                'relevance' => 1,
+                'grelevance' => 1,
+                'preg' => null,
+                'other' => 'N',
+                'help' => 'question help',
+                'type' => '?',
+                'database' => 'text'
+            )
+        );
     }
 }

@@ -1978,7 +1978,19 @@ function createFieldMap($surveyid, $style='short', $force_refresh=false, $questi
         $fieldname="{$arow['sid']}X{$arow['gid']}X{$arow['qid']}";
 
         // No subquestions and not R or | (ranking, file upload)
-        if ($qtypes[$arow['type']]['subquestions']==0  && $arow['type'] != "R" && $arow['type'] != "|")
+        if ($arow['type'] == '?')
+        {
+            require_once(Yii::app()->basePath . '/core/questions/TestQuestionObject/TestQuestionObject.php');
+            $question = TestQuestionObject::getInstance();
+            $question->setData(array(
+                'sid' => $arow['sid'],
+                'gid' => $arow['gid'],
+                'qid' => $arow['qid']
+            ));
+            $result = $question->getFieldmap($fieldname);
+            $fieldmap = array_merge($fieldmap, $result);
+        }
+        else if ($qtypes[$arow['type']]['subquestions']==0  && $arow['type'] != "R" && $arow['type'] != "|")
         {
             if (isset($fieldmap[$fieldname]))
             {
