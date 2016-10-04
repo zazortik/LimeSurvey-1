@@ -3603,6 +3603,9 @@
             $this->groupSeqInfo = array();
             $this->gseq2relevanceStatus = array();
 
+            /* Add the core replacement before question code : needed if use it in equation , use SID to never send error */
+            templatereplace("{SID}");
+
             // Since building array of allowable answers, need to know preset values for certain question types
             $presets = array();
             $presets['G'] = array(  //GENDER drop-down list
@@ -4893,7 +4896,6 @@
             $LEM->indexGseq=array();
             $LEM->indexQseq=array();
             $LEM->qrootVarName2arrayFilter=array();
-            templatereplace("{}"); // Needed for coreReplacements in relevance equation (in all mode)
             if (isset($_SESSION[$LEM->sessid]['startingValues']) && is_array($_SESSION[$LEM->sessid]['startingValues']) && count($_SESSION[$LEM->sessid]['startingValues']) > 0)
             {
                 $startingValues = array();
@@ -5359,7 +5361,7 @@
                     {
                         $sdata['refurl'] = getenv("HTTP_REFERER");
                     }
-                }
+                 }
 
                 $sdata = array_filter($sdata);
                 SurveyDynamic::sid($this->sid);
@@ -5459,7 +5461,7 @@
                     }
                     else
                     {
-                        $setter[] = dbQuoteID($key) . "=" . dbQuoteAll($val);
+                        $setter[] = dbQuoteID($key) . "=" . dbQuoteAll(stripCtrlChars($val));
                     }
                 }
                 $query .= implode(', ', $setter);
