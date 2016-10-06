@@ -59,6 +59,7 @@ final class QuestionObjectHelper {
     }
 
     /**
+     * @todo Order of this and getQuestionCodes matter, should be fixed.
      * @param string $extendedType
      * @return string html
      */
@@ -79,6 +80,16 @@ final class QuestionObjectHelper {
     {
         $question = self::getInstance($extendedType);
         return $question->getQuestionCodes();
+    }
+
+    /**
+     * @param string $extendedType
+     * @return array
+     */
+    public static function getAttributeNames($extendedType)
+    {
+        $question = self::getInstance($extendedType);
+        return $question->getAttributeNames();
     }
 
     /**
