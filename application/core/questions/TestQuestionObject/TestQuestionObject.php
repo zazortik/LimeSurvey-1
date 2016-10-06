@@ -10,6 +10,12 @@
  *   qanda_helper
  *   QuestionAttribute
  *   activate_helper
+ *
+ * Questions that have been modelled:
+ *   Short text
+ *   List
+ *   List, dropdown
+ *   List with comment
  */
 class TestQuestionObject // extends QuestionObjectBase
 {
@@ -120,8 +126,6 @@ class TestQuestionObject // extends QuestionObjectBase
         }
         $answer .= '<select>';
         $answer .= '<textarea name="' . $this->ia[1]  . 'comment' . '"></textarea>';
-
-        traceVar($answerOptions);
 
         return $answer;
     }
