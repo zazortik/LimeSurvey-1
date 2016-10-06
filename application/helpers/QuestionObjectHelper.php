@@ -13,12 +13,15 @@
 */
 namespace ls\helpers;
 
+class QuestionObjectException extends \CException {}
+
 /**
  * Entry point for the question object system.
  * @since 2016-10-06
  * @author Olle Haerstedt
  */
-final class QuestionObjectHelper {
+final class QuestionObjectHelper
+{
 
     /**
      * Used in createFieldMap.
@@ -101,6 +104,13 @@ final class QuestionObjectHelper {
     private static function getInstance($extendedType)
     {
         $file = '/core/questions/' . $extendedType . '/' . $extendedType . '.php';
+        $fullFilePath = \Yii::app()->basePath . $file;
+
+        $fileExists = file_exists($fullFilePath);
+
+        if (!$fileExists) {
+            throw new QuestionObjectException('Found no class or file with name ' . $extendedType);
+        }
 
         require_once(\Yii::app()->basePath . $file);
 
