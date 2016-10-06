@@ -386,9 +386,7 @@ function activateSurvey($iSurveyID, $simulate = false)
              * Extended question types
              */
             case '?':
-                require_once(Yii::app()->basePath . '/core/questions/TestQuestionObject/TestQuestionObject.php');
-                $question = TestQuestionObject::getInstance();
-                $extendedFields = $question->getDatabaseFieldTypes($aRow);
+                $extendedFields = \ls\helpers\QuestionObjectHelper::getDatabaseFieldTypes($aRow);
                 foreach ($extendedFields as $fieldname => $field) {
                     $aTableDefinition[$fieldname] = $field;
                 }

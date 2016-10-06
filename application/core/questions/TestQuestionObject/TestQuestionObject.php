@@ -337,6 +337,7 @@ class TestQuestionObject // extends QuestionObjectBase
                 'other' => 'N',
                 'help' => 'question help',
                 'type' => '?',
+                'extended_type' => 'TestQuestionObject',
                 'database' => 'string(5)'
             ),
             $fieldname . 'comment' => array(
@@ -359,6 +360,7 @@ class TestQuestionObject // extends QuestionObjectBase
                 'other' => 'N',
                 'help' => 'question help',
                 'type' => '?',
+                'extended_type' => 'TestQuestionObject',
                 'database' => 'text'
             )
         );
