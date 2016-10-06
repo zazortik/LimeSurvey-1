@@ -50,6 +50,38 @@ final class QuestionObjectHelper {
     }
 
     /**
+     * @param string $extendedType
+     */
+    public static function getQuestionText($extendedType)
+    {
+        $question = self::getInstance($extendedType);
+        return $question->getQuestionText();
+    }
+
+    /**
+     * @param string $extendedType
+     * @return string html
+     */
+    public static function getAnswer($extendedType, $ia, $aQuestionAttributes, $oQuestion)
+    {
+        $question = self::getInstance($extendedType);
+        $question->setIa($ia);
+        $question->setQuestionAttributes($aQuestionAttributes);
+        $question->setQuestionModel($oQuestion);
+        return $question->getAnswer();
+    }
+
+    /**
+     * @param string $extendedType
+     * @return array
+     */
+    public static function getQuestionCodes($extendedType)
+    {
+        $question = self::getInstance($extendedType);
+        return $question->getQuestionCodes();
+    }
+
+    /**
      * @todo Validate $extendedType
      * @todo Check if extended type is core type
      * @param string $extendedType

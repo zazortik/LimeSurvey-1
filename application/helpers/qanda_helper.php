@@ -341,9 +341,7 @@ function composeQuestionText(array $ia, array $aQuestionAttributes, Question $oQ
     // Check for question objects
     if ($ia[4] == '?')
     {
-        // TODO: Check extended_type here
-        $question = TestQuestionObject::getInstance();
-        return $question->getQuestionText();
+        return \ls\helpers\QuestionObjectHelper::getQuestionText($oQuestion->extended_type);
     }
 
     $number     = isset($ia[9]) ? $ia[9] : '';   // Previously in limesurvey, it was virtually impossible to control how the start of questions were formatted. // this is an attempt to allow users (or rather system admins) some control over how the starting text is formatted.
@@ -839,13 +837,13 @@ function do_equation($ia)
  */
 function do_question_object(array $ia, array $aQuestionAttributes, Question $oQuestion)
 {
-    $question = TestQuestionObject::getInstance();
-    $question->setIa($ia);
-    $question->setQuestionAttributes($aQuestionAttributes);
-    $question->setQuestionModel($oQuestion);
-
-    $answer = $question->getAnswer();
-    $inputnames = $question->getQuestionCodes();
+    $answer = \ls\helpers\QuestionObjectHelper::getAnswer(
+        $oQuestion->extended_type,
+        $ia,
+        $aQuestionAttributes,
+        $oQuestion
+    );
+    $inputnames = \ls\helpers\QuestionObjectHelper::getQuestionCodes($oQuestion->extended_type);
 
     return array($answer, $inputnames);
 }
