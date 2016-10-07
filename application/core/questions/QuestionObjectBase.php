@@ -7,29 +7,29 @@ abstract class QuestionObjectBase
      * @var array
      * @todo Rename to a more descriptive name
      */
-    private $ia;
+    protected $ia;
 
     /**
      * List of attributes is in questionHelper.
      * @var array
      */
-    private $questionAttributes;
+    protected $questionAttributes;
 
     /**
      * @var Question
      */
-    private $questionModel;
+    protected $questionModel;
 
     /**
      * Data used to create fieldmap
      * @var array
      */
-    private $data;
+    protected $data;
 
     /**
      * @var TestQuestionObject
      */
-    static private $instance = null;
+    static protected $instance = null;
 
     /**
      * @return TestQuestionObject
@@ -63,5 +63,25 @@ abstract class QuestionObjectBase
     public function setIa(array $ia)
     {
         $this->ia = $ia;
+    }
+
+    /**
+     * Called from qanda_helper.
+     * @param array $questionAttributes
+     * @return void
+     */
+    public function setQuestionAttributes(array $questionAttributes)
+    {
+        $this->questionAttributes = $questionAttributes;
+    }
+
+    /**
+     * Called from qanda_helper.
+     * @param Question $questionModel
+     * @return void
+     */
+    public function setQuestionModel(Question $questionModel)
+    {
+        $this->questionModel = $questionModel;
     }
 }

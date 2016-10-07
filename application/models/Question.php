@@ -279,16 +279,22 @@ class Question extends LSActiveRecord
     /**
      * This function is only called from database.php
      * TODO : create a relation to self called subquestion
+     * @param int|null $parent_qid
+     * @return
      */
-    function getSubQuestions($parent_qid)
+    function getSubQuestions($parent_qid = null)
     {
+        if ($parent_qid === null) {
+            $parent_qid = $this->qid;
+        }
+
         return Yii::app()->db->createCommand()
-        ->select()
-        ->from(self::tableName())
-        ->where('parent_qid=:parent_qid')
-        ->bindParam(":parent_qid", $parent_qid, PDO::PARAM_INT)
-        ->order('question_order asc')
-        ->query();
+            ->select()
+            ->from(self::tableName())
+            ->where('parent_qid=:parent_qid')
+            ->bindParam(":parent_qid", $parent_qid, PDO::PARAM_INT)
+            ->order('question_order asc')
+            ->query();
     }
 
     /**

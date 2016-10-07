@@ -126,8 +126,8 @@ function retrieveAnswers($ia)
       $ia[1]   // Fieldname
     );
 
-    traceVar($ia);
-    traceVar($question_text);
+    //traceVar($ia);
+    //traceVar($question_text);
     //traceVar(array($qanda, $inputnames));
 
     return array($qanda, $inputnames);

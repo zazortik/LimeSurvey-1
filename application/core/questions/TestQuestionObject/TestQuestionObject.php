@@ -207,25 +207,6 @@ class TestQuestionObject extends QuestionObjectBase
     }
 
     /**
-     * Called from qanda_helper.
-     * @param array $questionAttributes
-     * @return void
-     */
-    public function setQuestionAttributes(array $questionAttributes)
-    {
-        $this->questionAttributes = $questionAttributes;
-    }
-
-    /**
-     * Called from qanda_helper.
-     * @param Question $questionModel
-     * @return void
-     */
-    public function setQuestionModel(Question $questionModel)
-    {
-        $this->questionModel = $questionModel;
-    }
-    /**
      * Called from createFieldMap
      * Array
 		(
