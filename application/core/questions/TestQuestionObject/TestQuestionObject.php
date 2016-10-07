@@ -1,5 +1,7 @@
 <?php
 
+Yii::import('application.core.questions.QuestionObjectBase', true);
+
 /**
  * Test question object
  * Dummy system to be replaced, only here to investigate the communication
@@ -17,56 +19,13 @@
  *   List, dropdown
  *   List with comment
  */
-class TestQuestionObject // extends QuestionObjectBase
+class TestQuestionObject extends QuestionObjectBase
 {
-
-    /**
-     * Specification for this array is in top of qanda helper.
-     * @var array
-     * @todo Rename to a more descriptive name
-     */
-    private $ia;
-
-    /**
-     * List of attributes is in questionHelper.
-     * @var array
-     */
-    private $questionAttributes;
-
-    /**
-     * @var Question
-     */
-    private $questionModel;
-
-    /**
-     * Data used to create fieldmap
-     * @var array
-     */
-    private $data;
-
-    /**
-     * @var TestQuestionObject
-     */
-    static private $instance = null;
-
     /**
      */
     private function __construct()
     {
         // Nothing, use setIa() etc instead
-    }
-
-    /**
-     * @return TestQuestionObject
-     */
-    public static function getInstance()
-    {
-        if (empty(self::$instance))
-        {
-            self::$instance = new TestQuestionObject();
-        }
-
-        return self::$instance;
     }
 
     /**
@@ -259,32 +218,12 @@ class TestQuestionObject // extends QuestionObjectBase
 
     /**
      * Called from qanda_helper.
-     * @param array $ia
-     * @return void
-     */
-    public function setIa(array $ia)
-    {
-        $this->ia = $ia;
-    }
-
-    /**
-     * Called from qanda_helper.
      * @param Question $questionModel
      * @return void
      */
     public function setQuestionModel(Question $questionModel)
     {
         $this->questionModel = $questionModel;
-    }
-
-    /**
-     * Set data needed to create the fieldmap
-     * @param array $data
-     * @return void
-     */
-    public function setData(array $data)
-    {
-        $this->data = $data;
     }
     /**
      * Called from createFieldMap
