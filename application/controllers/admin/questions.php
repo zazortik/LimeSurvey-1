@@ -28,13 +28,20 @@ class questions extends Survey_Common_Action
 
     public function view($surveyid, $gid, $qid)
     {
+        $baselang = Survey::model()->findByPk($surveyid)->language;
+
+        // If this question is an extended question, redirect to its own controller
+        $question = Question::model()->findByPk(array('qid' => $qid, 'language' => $baselang));
+        if ($question['type'] == '?') {
+            ls\helpers\QuestionObjectHelper::redirectQuestionView($surveyid, $question);
+        }
+
         $aData = array();
 
         // Init general variables
         $aData['surveyid'] = $iSurveyID = $surveyid;
         $aData['gid'] = $gid;
         $aData['qid'] = $qid;
-        $baselang = Survey::model()->findByPk($iSurveyID)->language;
 
         //Show Question Details
         //Count answer-options for this question

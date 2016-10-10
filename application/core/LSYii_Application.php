@@ -81,7 +81,7 @@ class LSYii_Application extends CWebApplication
         App()->getAssetManager()->setBaseUrl($settings['tempurl']. '/assets');
         App()->getAssetManager()->setBasePath($settings['tempdir'] . '/assets');
 
-
+        \ls\helpers\QuestionObjectHelper::updateControllerMap($this);
 
     }
 

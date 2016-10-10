@@ -123,4 +123,34 @@ final class QuestionObjectHelper
         $m = new \ReflectionMethod($extendedType, 'getInstance');
         return $m->invoke(null);
     }
+
+    /**
+     * @param int $surveyId
+     * @param \Question $question
+     * @return void
+     */
+    public static function redirectQuestionView($surveyId, \Question $question)
+    {
+        $controllerName = $question->extended_type . 'Admin';
+        $url = \Yii::app()->getController()->createUrl(
+            '/application/core/questions/' . $question->extended_type . '/test/index',
+            array(
+            )
+        );
+        \Yii::app()->getController()->redirect($url);
+    }
+
+    /**
+     * This is called when the web app is initialized.
+     * @todo Add mappings to controller map dynamically from installed question types.
+     * @param CWebApplication $app
+     * @return void
+     */
+    public static function updateControllerMap(\CWebApplication $app)
+    {
+        $app->controllerMap = array(
+            'ArrayQuestionObjectAdminController' => 'application.core.questions.ArrayQuestionObject.ArrayQuestionObjectAdminController',
+            'TestQuestionObjectAdminController' => 'application.core.questions.TestQuestionObject.TestQuestionObjectAdminController'
+        );
+    }
 }

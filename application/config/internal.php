@@ -73,6 +73,7 @@ $internalConfig = array(
     'import' => array(
         'application.core.*',
         'application.core.db.*',
+        'application.core.questions.*',
         'application.models.*',
         'application.controllers.*',
         'application.modules.*',
