@@ -131,11 +131,10 @@ final class QuestionObjectHelper
      */
     public static function redirectQuestionView($surveyId, \Question $question)
     {
-        $controllerName = $question->extended_type . 'Admin';
+        $controllerName = $question->extended_type . 'AdminController';
         $url = \Yii::app()->getController()->createUrl(
-            '/application/core/questions/' . $question->extended_type . '/test/index',
-            array(
-            )
+            $controllerName . '/view',
+            array()
         );
         \Yii::app()->getController()->redirect($url);
     }
