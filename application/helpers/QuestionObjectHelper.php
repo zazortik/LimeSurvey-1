@@ -38,7 +38,13 @@ final class QuestionObjectHelper
             'gid' => $row['gid'],
             'qid' => $row['qid']
         ));
-        return $question->getFieldmap($fieldname);
+        $fieldmap = $question->getFieldmap($fieldname);
+
+        if (empty($fieldmap)) {
+            throw new QuestionObjectException('Fieldmap is empty');
+        }
+
+        return $fieldmap;
     }
 
     /**

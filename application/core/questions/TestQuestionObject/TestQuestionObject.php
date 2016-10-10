@@ -21,12 +21,6 @@ Yii::import('application.core.questions.QuestionObjectBase', true);
  */
 class TestQuestionObject extends QuestionObjectBase
 {
-    /**
-     */
-    private function __construct()
-    {
-        // Nothing, use setIa() etc instead
-    }
 
     /**
      * HTML for answers

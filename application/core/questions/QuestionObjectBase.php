@@ -32,6 +32,14 @@ abstract class QuestionObjectBase
     static protected $instance = null;
 
     /**
+     * 
+     * @return 
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * @return TestQuestionObject
      */
     public static function getInstance()
